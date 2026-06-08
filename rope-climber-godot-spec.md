@@ -61,8 +61,8 @@ On a platform (grounded)
   → THROW: release to fire rope; it arcs and hooks onto any platform surface it hits
   → SWING: pump A/D to build amplitude; rope may wrap corners and whip you around
   → ASCEND: either
-       (a) swing up and RELEASE to land on a higher platform (rest, grip refills), or
-       (b) throw a NEW rope mid-swing onto any higher surface (chain, no rest — mastery path)
+	   (a) swing up and RELEASE to land on a higher platform (rest, grip refills), or
+	   (b) throw a NEW rope mid-swing onto any higher surface (chain, no rest — mastery path)
   → repeat upward to the GOAL
 Fail state: grip runs out while airborne → you drop the rope and fall.
 ```
@@ -96,20 +96,20 @@ pos = pos + vel + Vector2(0, -config.gravity) * dt * dt
 ```gdscript
 # returns true if grounded this step
 func resolve_aabb(p: PhysicsPoint, radius: float, platforms: Array) -> bool:
-    var grounded := false
-    for plat in platforms:
-        var d := p.pos - plat.center
-        var ox := (plat.half.x + radius) - abs(d.x)
-        var oy := (plat.half.y + radius) - abs(d.y)
-        if ox > 0.0 and oy > 0.0:
-            if ox < oy:
-                p.pos.x += ox if d.x > 0 else -ox
-                p.prev_pos.x = p.pos.x  # kill x velocity
-            else:
-                p.pos.y += oy if d.y > 0 else -oy
-                if d.y > 0: grounded = true
-                p.prev_pos.y = p.pos.y  # kill y velocity
-    return grounded
+	var grounded := false
+	for plat in platforms:
+		var d := p.pos - plat.center
+		var ox := (plat.half.x + radius) - abs(d.x)
+		var oy := (plat.half.y + radius) - abs(d.y)
+		if ox > 0.0 and oy > 0.0:
+			if ox < oy:
+				p.pos.x += ox if d.x > 0 else -ox
+				p.prev_pos.x = p.pos.x  # kill x velocity
+			else:
+				p.pos.y += oy if d.y > 0 else -oy
+				if d.y > 0: grounded = true
+				p.prev_pos.y = p.pos.y  # kill y velocity
+	return grounded
 ```
 
 ---
@@ -123,44 +123,44 @@ The single most important requirement from the client: **clean, scalable, easy t
 res://
   project.godot
   /scenes
-    main.tscn                      # root: spawns level, player, camera, hud
-    /player/player.tscn
-    /creature/creature.tscn
-    /level/platform_view.tscn      # visual mesh for one platform
-    /ui/hud.tscn
+	main.tscn                      # root: spawns level, player, camera, hud
+	/player/player.tscn
+	/creature/creature.tscn
+	/level/platform_view.tscn      # visual mesh for one platform
+	/ui/hud.tscn
   /scripts
-    /core
-      game_director.gd             # autoload: owns run lifecycle/state
-      event_bus.gd                 # autoload: global signals (decoupling)
-      game_config.gd               # class_name GameConfig (Resource)
-    /player
-      player.gd                    # owns the player PhysicsPoint + state machine
-      player_state_machine.gd
-      /states                      # one script per state
-        state.gd                   # base
-        grounded_state.gd
-        aiming_state.gd
-        airborne_state.gd          # swinging OR free-falling (rope attached or not)
-      rope.gd                      # class_name Rope: hinge stack, constraint, wrapping
-      throw_controller.gd          # aim, power, prediction, fire
-    /sim
-      physics_point.gd             # class_name PhysicsPoint (pos/prev_pos verlet)
-      aabb_util.gd                 # collision + segment/box helpers (static funcs)
-    /camera
-      game_camera.gd
-    /level
-      level_data.gd                # class_name LevelData (Resource): platforms, start, goal
-      level.gd                     # builds visuals from LevelData, exposes platform rects
-    /feedback
-      audio_manager.gd             # autoload: plays SFX in response to EventBus
-      effects_manager.gd           # autoload: particles, hitstop, trail, shake hooks
-    /ui
-      hud.gd
+	/core
+	  game_director.gd             # autoload: owns run lifecycle/state
+	  event_bus.gd                 # autoload: global signals (decoupling)
+	  game_config.gd               # class_name GameConfig (Resource)
+	/player
+	  player.gd                    # owns the player PhysicsPoint + state machine
+	  player_state_machine.gd
+	  /states                      # one script per state
+		state.gd                   # base
+		grounded_state.gd
+		aiming_state.gd
+		airborne_state.gd          # swinging OR free-falling (rope attached or not)
+	  rope.gd                      # class_name Rope: hinge stack, constraint, wrapping
+	  throw_controller.gd          # aim, power, prediction, fire
+	/sim
+	  physics_point.gd             # class_name PhysicsPoint (pos/prev_pos verlet)
+	  aabb_util.gd                 # collision + segment/box helpers (static funcs)
+	/camera
+	  game_camera.gd
+	/level
+	  level_data.gd                # class_name LevelData (Resource): platforms, start, goal
+	  level.gd                     # builds visuals from LevelData, exposes platform rects
+	/feedback
+	  audio_manager.gd             # autoload: plays SFX in response to EventBus
+	  effects_manager.gd           # autoload: particles, hitstop, trail, shake hooks
+	/ui
+	  hud.gd
   /resources
-    default_config.tres            # a GameConfig instance (all tuning lives here)
-    /levels/level_01.tres          # a LevelData instance
+	default_config.tres            # a GameConfig instance (all tuning lives here)
+	/levels/level_01.tres          # a LevelData instance
   /assets
-    /audio  /models  /materials
+	/audio  /models  /materials
 ```
 
 ### 5.2 Autoloads (singletons)
@@ -244,13 +244,13 @@ extends Resource
 **MVP level (`level_01.tres`) — the validated zig-zag layout** (center x,y / width,height):
 ```
 ground : ( 0, -1) 46 x 2   [is_ground]
-        : ( 5,  5)  9 x 1.4
-        : (-5, 10)  9 x 1.4
-        : ( 6, 15)  8 x 1.4
-        : (-6, 20)  8 x 1.4
-        : ( 6, 25)  8 x 1.4
-        : (-6, 30)  8 x 1.4
-        : ( 5, 35)  8 x 1.4
+		: ( 5,  5)  9 x 1.4
+		: (-5, 10)  9 x 1.4
+		: ( 6, 15)  8 x 1.4
+		: (-6, 20)  8 x 1.4
+		: ( 6, 25)  8 x 1.4
+		: (-6, 30)  8 x 1.4
+		: ( 5, 35)  8 x 1.4
 goal   : ( 0, 41) 11 x 1.8 [is_goal]
 start_pos = (0, 1)
 ```
@@ -311,7 +311,7 @@ var pv := hinges.back().pos
 var d := player.pos - pv
 var dist := d.length()
 if dist > active_length:
-    player.pos -= d * ((dist - active_length) / dist)
+	player.pos -= d * ((dist - active_length) / dist)
 ```
 
 **Reel:** `W` decreases `length` (down to `rope_min_length`), `S` increases it. Shortening near the bottom of a swing adds energy (intentional emergent skill).
@@ -350,10 +350,10 @@ if dist > active_length:
 **UNWRAP — peel off a corner.** Before wrapping each step, check the last hinge: compute the current winding sign using the previous hinge and the player; if it flipped from the stored `wind`, the rope has swung back past the corner — pop the hinge (its length returns to the active segment automatically via the consumed-length recompute).
 ```gdscript
 while hinges.size() > 1:
-    var H = hinges.back(); var Hp = hinges[hinges.size()-2]
-    var s := sign((H.pos.x-Hp.pos.x)*(player.y-H.pos.y) - (H.pos.y-Hp.pos.y)*(player.x-H.pos.x))
-    if s != 0 and s != H.wind: hinges.pop_back()
-    else: break
+	var H = hinges.back(); var Hp = hinges[hinges.size()-2]
+	var s := sign((H.pos.x-Hp.pos.x)*(player.y-H.pos.y) - (H.pos.y-Hp.pos.y)*(player.x-H.pos.x))
+	if s != 0 and s != H.wind: hinges.pop_back()
+	else: break
 ```
 
 **Order per physics step (attached):** integrate player → apply pump → apply reel → solve constraint (N iters) → unwrap → wrap → solve constraint again (2 iters to settle).

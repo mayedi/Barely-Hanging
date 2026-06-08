@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="LevelData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/level/level_data.gd" id="1_level"]
+
+[resource]
+script = ExtResource("1_level")
+start_pos = Vector2(0, 1)
+platforms = Array[Dictionary]([{
+"center": Vector2(0, -1),
+"size": Vector2(46, 2),
+"is_ground": true,
+"is_checkpoint": true
+}, {
+"center": Vector2(5, 5),
+"size": Vector2(9, 1.4)
+}, {
+"center": Vector2(-5, 10),
+"size": Vector2(9, 1.4),
+"is_checkpoint": true
+}, {
+"center": Vector2(6, 15),
+"size": Vector2(8, 1.4)
+}, {
+"center": Vector2(-6, 20),
+"size": Vector2(8, 1.4),
+"is_checkpoint": true
+}, {
+"center": Vector2(6, 25),
+"size": Vector2(8, 1.4)
+}, {
+"center": Vector2(-6, 30),
+"size": Vector2(8, 1.4),
+"is_checkpoint": true
+}, {
+"center": Vector2(5, 35),
+"size": Vector2(8, 1.4)
+}, {
+"center": Vector2(0, 41),
+"size": Vector2(11, 1.8),
+"is_goal": true
+}])

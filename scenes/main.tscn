@@ -1,0 +1,32 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/level/level.gd" id="2_level"]
+[ext_resource type="Script" path="res://scripts/camera/game_camera.gd" id="3_cam"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="4_player"]
+[ext_resource type="Script" path="res://scripts/player/rope_view.gd" id="5_rope"]
+[ext_resource type="Script" path="res://scripts/player/aim_preview.gd" id="6_aim"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
+[ext_resource type="Script" path="res://scripts/debug/debug_view.gd" id="8_debug"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_main")
+
+[node name="Level" type="Node3D" parent="."]
+script = ExtResource("2_level")
+
+[node name="GameCamera" type="Camera3D" parent="."]
+script = ExtResource("3_cam")
+
+[node name="Player" parent="." instance=ExtResource("4_player")]
+
+[node name="RopeView" type="Node3D" parent="."]
+script = ExtResource("5_rope")
+
+[node name="AimPreview" type="Node3D" parent="."]
+script = ExtResource("6_aim")
+
+[node name="HUD" parent="." instance=ExtResource("7_hud")]
+
+[node name="DebugView" type="Node3D" parent="."]
+script = ExtResource("8_debug")
