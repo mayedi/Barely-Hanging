@@ -69,7 +69,33 @@ scripts/
 resources/   default_config.tres (ALL tuning), levels/level_01.tres (the level as data)
 ```
 
-- **Autoloads:** `EventBus`, `GameDirector`, `AudioManager`, `EffectsManager`.
+Everything that can be a scene or resource is **authored** (editable in the editor), not
+built in code. Scripts only hold behaviour and data-driven configuration.
+
+```
+scenes/
+  main.tscn                 WorldEnvironment + lights + all top-level nodes
+  creature/creature.tscn    body, fur MultiMesh, eye hierarchy, feet (meshes/materials)
+  player/                   player.tscn, rope_view.tscn, aim_preview.tscn
+  level/                    platform_view.tscn, parallax_box.tscn (templates, data-driven)
+  ui/hud.tscn               full Control tree
+  fx/                       attach_burst.tscn, land_dust.tscn, trail_ghost.tscn
+  audio/audio_manager.tscn  AudioStreamPlayers wired to the .wav SFX (an autoload scene)
+  debug/debug_view.tscn
+resources/
+  default_config.tres       ALL tuning
+  levels/level_01.tres       the level as data
+  env/world_environment.tres sky + fog + ambient
+  materials/*.tres           platform materials
+assets/audio/*.wav          procedurally-baked SFX (see tools/gen_assets.gd)
+```
+
+A few things are necessarily script-driven because they are dynamic data, not static
+content: the fibonacci fur distribution, the rope/aim/debug geometry (rebuilt each frame
+from live positions), platform sizes (from level data), and particle placement. The
+nodes, meshes and materials they use are all authored.
+
+- **Autoloads:** `EventBus`, `GameDirector`, `AudioManager` (scene), `EffectsManager`.
 - **Tuning:** every gameplay number lives in `resources/default_config.tres` — tweak it in
   the Inspector with zero code changes.
 - **Levels:** are data (`LevelData`), not hardcode. `level_01.tres` is the validated
@@ -88,8 +114,5 @@ Guarded command-line flags, no effect on normal play:
 
 ## Notes
 
-- On an abrupt `--quit-after` exit you may see a one-line `AudioStreamGeneratorPlayback`
-  leak warning — a benign Godot quirk of procedural audio on forced shutdown; it does not
-  occur in normal play and is a single, non-growing object.
 - The Future Roadmap features (anchor types, hazards, ghost races, etc.) are **not** built,
   but the data-driven levels + EventBus + config make them addable without rewrites.

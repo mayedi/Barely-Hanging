@@ -1,6 +1,112 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="Script" path="res://scripts/creature/creature.gd" id="1_creature"]
 
+[sub_resource type="StandardMaterial3D" id="mat_body"]
+albedo_color = Color(0.94, 0.51, 0.18, 1)
+roughness = 0.95
+
+[sub_resource type="SphereMesh" id="mesh_body"]
+material = SubResource("mat_body")
+radius = 0.5
+height = 1.0
+
+[sub_resource type="StandardMaterial3D" id="mat_fur"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 1, 1, 1)
+roughness = 0.95
+
+[sub_resource type="CylinderMesh" id="mesh_tuft"]
+material = SubResource("mat_fur")
+top_radius = 0.0
+bottom_radius = 0.055
+height = 0.17
+radial_segments = 5
+rings = 1
+
+[sub_resource type="MultiMesh" id="mm_fur"]
+transform_format = 1
+use_colors = true
+mesh = SubResource("mesh_tuft")
+
+[sub_resource type="StandardMaterial3D" id="mat_eyeball"]
+albedo_color = Color(0.96, 0.93, 0.85, 1)
+roughness = 0.4
+
+[sub_resource type="SphereMesh" id="mesh_eyeball"]
+material = SubResource("mat_eyeball")
+radius = 0.27
+height = 0.54
+
+[sub_resource type="StandardMaterial3D" id="mat_iris"]
+albedo_color = Color(0.12, 0.61, 0.56, 1)
+roughness = 0.3
+
+[sub_resource type="SphereMesh" id="mesh_iris"]
+material = SubResource("mat_iris")
+radius = 0.14
+height = 0.28
+
+[sub_resource type="StandardMaterial3D" id="mat_pupil"]
+albedo_color = Color(0.02, 0.02, 0.03, 1)
+roughness = 0.2
+
+[sub_resource type="SphereMesh" id="mesh_pupil"]
+material = SubResource("mat_pupil")
+radius = 0.07
+height = 0.14
+
+[sub_resource type="StandardMaterial3D" id="mat_glint"]
+shading_mode = 0
+albedo_color = Color(1, 1, 1, 1)
+
+[sub_resource type="SphereMesh" id="mesh_glint"]
+material = SubResource("mat_glint")
+radius = 0.032
+height = 0.064
+
+[sub_resource type="StandardMaterial3D" id="mat_feet"]
+albedo_color = Color(0.6, 0.32, 0.1, 1)
+roughness = 0.9
+
+[sub_resource type="SphereMesh" id="mesh_foot"]
+material = SubResource("mat_feet")
+radius = 0.16
+height = 0.32
+
 [node name="Creature" type="Node3D"]
 script = ExtResource("1_creature")
+
+[node name="Body" type="MeshInstance3D" parent="."]
+mesh = SubResource("mesh_body")
+
+[node name="Fur" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("mm_fur")
+
+[node name="EyeRoot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0.42)
+
+[node name="Eyeball" type="MeshInstance3D" parent="EyeRoot"]
+mesh = SubResource("mesh_eyeball")
+
+[node name="Gaze" type="Node3D" parent="EyeRoot"]
+
+[node name="Iris" type="MeshInstance3D" parent="EyeRoot/Gaze"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0.21)
+mesh = SubResource("mesh_iris")
+
+[node name="Pupil" type="MeshInstance3D" parent="EyeRoot/Gaze"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.5, 0, 0, 0.25)
+mesh = SubResource("mesh_pupil")
+
+[node name="Glint" type="MeshInstance3D" parent="EyeRoot/Gaze"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.07, 0.27)
+mesh = SubResource("mesh_glint")
+
+[node name="FootL" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.45, 0, 0, 0, 1.2, -0.22, -0.48, 0.12)
+mesh = SubResource("mesh_foot")
+
+[node name="FootR" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.45, 0, 0, 0, 1.2, 0.22, -0.48, 0.12)
+mesh = SubResource("mesh_foot")

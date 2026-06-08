@@ -1,41 +1,24 @@
 class_name DebugView
 extends Node3D
-## Visual debug overlay (spec §6.3, §13) — toggle with F3 (GameDirector.debug_draw).
-## Draws the rope hinge polyline + markers, the active-length circle around the current
-## pivot, and the velocity vector, plus a text panel (hinge count, active length, speed,
-## grip, state). A dev tool: it reads the player directly via get_debug(). Essential for
-## debugging the corner-wrapping, which is the highest-risk system.
+## Visual debug overlay (spec §6.3, §13) — toggle with F3 (GameDirector.debug_draw). The
+## nodes (line mesh + material, CanvasLayer + Label) are AUTHORED in debug_view.tscn; this
+## script only draws the live hinge polyline, the active-length circle and the velocity
+## vector into the ImmediateMesh, and writes the text. A dev tool — it reads the player via
+## get_debug(). Essential for debugging corner-wrapping, the highest-risk system.
 
 const CIRCLE_SEGMENTS: int = 48
 const CROSS: float = 0.25
 const FORE_Z: float = 0.25
 const VEL_SCALE: float = 0.12
 
+@onready var _mesh: MeshInstance3D = $Lines
+@onready var _label: Label = $Overlay/Label
+
 var _player: Player = null
-var _mesh: MeshInstance3D
 var _im: ImmediateMesh
-var _label: Label
 
 func _ready() -> void:
-	_im = ImmediateMesh.new()
-	_mesh = MeshInstance3D.new()
-	_mesh.mesh = _im
-	var mat := StandardMaterial3D.new()
-	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	mat.vertex_color_use_as_albedo = true
-	mat.cull_mode = BaseMaterial3D.CULL_DISABLED
-	mat.no_depth_test = true
-	_mesh.material_override = mat
-	add_child(_mesh)
-
-	var layer := CanvasLayer.new()
-	add_child(layer)
-	_label = Label.new()
-	_label.position = Vector2(24.0, 96.0)
-	_label.add_theme_color_override("font_color", Color(0.6, 1.0, 0.9))
-	_label.add_theme_font_size_override("font_size", 15)
-	layer.add_child(_label)
-
+	_im = _mesh.mesh
 	_set_visible(false)
 
 func setup(player: Player) -> void:
@@ -58,13 +41,10 @@ func _draw(info: Dictionary) -> void:
 	var vel: Vector2 = info["vel"]
 	_im.clear_surfaces()
 	_im.surface_begin(Mesh.PRIMITIVE_LINES)
-	# hinge markers (skip index 0 = the player itself)
 	for i in range(1, hinges.size()):
 		_cross(hinges[i], Color(1.0, 0.85, 0.2))
-	# active-length circle around the current pivot (hinges[1] when attached)
 	if info["has_rope"] and hinges.size() >= 2:
 		_circle(hinges[1], info["active_len"], Color(0.2, 0.85, 1.0))
-	# velocity vector
 	_line(pos, pos + vel * VEL_SCALE, Color(1.0, 0.3, 0.85))
 	_im.surface_end()
 

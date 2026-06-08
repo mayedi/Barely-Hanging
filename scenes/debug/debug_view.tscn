@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/debug/debug_view.gd" id="1_debug"]
+
+[sub_resource type="StandardMaterial3D" id="mat_lines"]
+cull_mode = 2
+shading_mode = 0
+vertex_color_use_as_albedo = true
+no_depth_test = true
+
+[sub_resource type="ImmediateMesh" id="im_lines"]
+
+[node name="DebugView" type="Node3D"]
+script = ExtResource("1_debug")
+
+[node name="Lines" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("im_lines")
+material_override = SubResource("mat_lines")
+
+[node name="Overlay" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="Overlay"]
+visible = false
+offset_left = 24.0
+offset_top = 96.0
+offset_right = 420.0
+offset_bottom = 200.0
+theme_override_colors/font_color = Color(0.6, 1, 0.9, 1)
+theme_override_font_sizes/font_size = 15

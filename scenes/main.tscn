@@ -1,16 +1,30 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/level/level.gd" id="2_level"]
 [ext_resource type="Script" path="res://scripts/camera/game_camera.gd" id="3_cam"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="4_player"]
-[ext_resource type="Script" path="res://scripts/player/rope_view.gd" id="5_rope"]
-[ext_resource type="Script" path="res://scripts/player/aim_preview.gd" id="6_aim"]
+[ext_resource type="PackedScene" path="res://scenes/player/rope_view.tscn" id="5_rope"]
+[ext_resource type="PackedScene" path="res://scenes/player/aim_preview.tscn" id="6_aim"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
-[ext_resource type="Script" path="res://scripts/debug/debug_view.gd" id="8_debug"]
+[ext_resource type="PackedScene" path="res://scenes/debug/debug_view.tscn" id="8_debug"]
+[ext_resource type="Environment" path="res://resources/env/world_environment.tres" id="9_env"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_main")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("9_env")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.788011, 0, 0.615662, 0.485148, 0.615662, -0.620961, -0.379039, 0.788011, 0.485148, 0, 0, 0)
+light_color = Color(1, 0.95, 0.86, 1)
+light_energy = 1.15
+
+[node name="Fill" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.707107, 0, -0.707107, -0.218508, 0.951057, 0.218508, 0.672499, 0.309017, -0.672499, 0, 0, 0)
+light_color = Color(0.66, 0.76, 1, 1)
+light_energy = 0.35
 
 [node name="Level" type="Node3D" parent="."]
 script = ExtResource("2_level")
@@ -20,13 +34,10 @@ script = ExtResource("3_cam")
 
 [node name="Player" parent="." instance=ExtResource("4_player")]
 
-[node name="RopeView" type="Node3D" parent="."]
-script = ExtResource("5_rope")
+[node name="RopeView" parent="." instance=ExtResource("5_rope")]
 
-[node name="AimPreview" type="Node3D" parent="."]
-script = ExtResource("6_aim")
+[node name="AimPreview" parent="." instance=ExtResource("6_aim")]
 
 [node name="HUD" parent="." instance=ExtResource("7_hud")]
 
-[node name="DebugView" type="Node3D" parent="."]
-script = ExtResource("8_debug")
+[node name="DebugView" parent="." instance=ExtResource("8_debug")]

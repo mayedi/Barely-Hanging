@@ -6,6 +6,7 @@ extends Node3D
 ## these nodes, so visuals and physics can never drift apart.
 
 const PlatformViewScene: PackedScene = preload("res://scenes/level/platform_view.tscn")
+const ParallaxBoxScene: PackedScene = preload("res://scenes/level/parallax_box.tscn")
 const PULSE_HZ: float = 1.6
 const PULSE_REACH: float = 12.0    ## only hint at platforms within a plausible swing above
 const PARALLAX_SEED: int = 1337
@@ -68,22 +69,16 @@ func _build_parallax() -> void:
 	holder.name = "Parallax"
 	add_child(holder)
 	for i in PARALLAX_COUNT:
-		var b := MeshInstance3D.new()
-		var bm := BoxMesh.new()
+		# Instance the authored template; only size/position/colour are data-driven (the
+		# mesh + material are scene-local, so each box is independent).
+		var b: MeshInstance3D = ParallaxBoxScene.instantiate()
 		var w := rng.randf_range(4.0, 10.0)
-		bm.size = Vector3(w, w * rng.randf_range(0.8, 2.2), 3.0)
-		b.mesh = bm
 		var z := rng.randf_range(PARALLAX_Z_NEAR, PARALLAX_Z_FAR)
-		b.position = Vector3(
-			rng.randf_range(-48.0, 48.0),
-			rng.randf_range(-12.0, 54.0),
-			z)
-		# Manual depth cue: blend toward the sky haze with distance so far boxes melt into
-		# the background instead of competing with the foreground. Self-lit (unshaded) so
-		# the directional lights can't brighten them back up.
+		(b.mesh as BoxMesh).size = Vector3(w, w * rng.randf_range(0.8, 2.2), 3.0)
+		b.position = Vector3(rng.randf_range(-48.0, 48.0), rng.randf_range(-12.0, 54.0), z)
+		# Depth cue: blend toward the sky haze with distance so far boxes melt into the
+		# background instead of competing with the foreground.
 		var t := clampf((z - PARALLAX_Z_NEAR) / (PARALLAX_Z_FAR - PARALLAX_Z_NEAR), 0.0, 1.0)
-		var m := StandardMaterial3D.new()
-		m.albedo_color = PARALLAX_NEAR_COLOR.lerp(PARALLAX_FAR_COLOR, t)
-		m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		b.material_override = m
+		(b.mesh.surface_get_material(0) as StandardMaterial3D).albedo_color = \
+			PARALLAX_NEAR_COLOR.lerp(PARALLAX_FAR_COLOR, t)
 		holder.add_child(b)

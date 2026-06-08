@@ -1,0 +1,30 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/rope_view.gd" id="1_rope"]
+
+[sub_resource type="StandardMaterial3D" id="mat_ribbon"]
+cull_mode = 2
+shading_mode = 0
+albedo_color = Color(0.16, 0.13, 0.11, 1)
+
+[sub_resource type="ImmediateMesh" id="im_ribbon"]
+
+[sub_resource type="StandardMaterial3D" id="mat_tip"]
+shading_mode = 0
+albedo_color = Color(0.1, 0.72, 0.62, 1)
+
+[sub_resource type="SphereMesh" id="mesh_tip"]
+material = SubResource("mat_tip")
+radius = 0.17
+height = 0.34
+
+[node name="RopeView" type="Node3D"]
+script = ExtResource("1_rope")
+
+[node name="Ribbon" type="MeshInstance3D" parent="."]
+mesh = SubResource("im_ribbon")
+material_override = SubResource("mat_ribbon")
+
+[node name="Tip" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("mesh_tip")

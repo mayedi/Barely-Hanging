@@ -4,3 +4,127 @@
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
+
+[node name="Controls" type="Label" parent="."]
+offset_left = 24.0
+offset_top = 18.0
+offset_right = 540.0
+offset_bottom = 80.0
+theme_override_colors/font_color = Color(0.85, 0.88, 0.95, 0.8)
+theme_override_font_sizes/font_size = 14
+text = "aim: mouse   throw: hold/release L-click   pump: A / D
+reel: W / S   release: Space   reset: R"
+
+[node name="Height" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -110.0
+offset_top = 18.0
+offset_right = 110.0
+offset_bottom = 62.0
+theme_override_font_sizes/font_size = 34
+text = "0 m"
+horizontal_alignment = 1
+
+[node name="Prompt" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -360.0
+offset_top = 74.0
+offset_right = 360.0
+offset_bottom = 108.0
+theme_override_colors/font_color = Color(1, 0.95, 0.7, 1)
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="GripBg" type="ColorRect" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = -52.0
+offset_right = 308.0
+offset_bottom = -28.0
+color = Color(0, 0, 0, 0.5)
+
+[node name="GripFill" type="ColorRect" parent="GripBg"]
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 277.0
+offset_bottom = 21.0
+color = Color(0.3, 0.82, 0.45, 1)
+
+[node name="GripState" type="Label" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 28.0
+offset_top = -78.0
+offset_right = 308.0
+offset_bottom = -56.0
+text = "GRIP"
+
+[node name="PowerBg" type="ColorRect" parent="."]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -308.0
+offset_top = -52.0
+offset_right = -28.0
+offset_bottom = -28.0
+color = Color(0, 0, 0, 0.5)
+
+[node name="PowerFill" type="ColorRect" parent="PowerBg"]
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 3.0
+offset_bottom = 21.0
+color = Color(0.2, 0.82, 0.92, 1)
+
+[node name="PowerLabel" type="Label" parent="."]
+visible = false
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -308.0
+offset_top = -78.0
+offset_right = -28.0
+offset_bottom = -56.0
+text = "POWER"
+horizontal_alignment = 2
+
+[node name="WinRoot" type="Control" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Panel" type="ColorRect" parent="WinRoot"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -90.0
+offset_right = 260.0
+offset_bottom = 90.0
+color = Color(0.05, 0.06, 0.09, 0.82)
+
+[node name="Title" type="Label" parent="WinRoot/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -30.0
+theme_override_colors/font_color = Color(0.98, 0.82, 0.35, 1)
+theme_override_font_sizes/font_size = 56
+text = "SUMMIT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Sub" type="Label" parent="WinRoot/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 56.0
+text = "press R to climb again"
+horizontal_alignment = 1
+vertical_alignment = 1

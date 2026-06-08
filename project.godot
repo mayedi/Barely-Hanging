@@ -19,7 +19,7 @@ config/icon="res://icon.svg"
 
 EventBus="*res://scripts/core/event_bus.gd"
 GameDirector="*res://scripts/core/game_director.gd"
-AudioManager="*res://scripts/feedback/audio_manager.gd"
+AudioManager="*res://scenes/audio/audio_manager.tscn"
 EffectsManager="*res://scripts/feedback/effects_manager.gd"
 
 [display]

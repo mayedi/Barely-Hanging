@@ -1,0 +1,45 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/aim_preview.gd" id="1_aim"]
+
+[sub_resource type="StandardMaterial3D" id="mat_dot"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.95, 0.96, 0.98, 0.85)
+
+[sub_resource type="SphereMesh" id="mesh_dot"]
+material = SubResource("mat_dot")
+radius = 0.13
+height = 0.26
+radial_segments = 6
+rings = 3
+
+[sub_resource type="MultiMesh" id="mm_dots"]
+transform_format = 1
+mesh = SubResource("mesh_dot")
+instance_count = 96
+visible_instance_count = 0
+
+[sub_resource type="TorusMesh" id="mesh_torus"]
+inner_radius = 0.42
+outer_radius = 0.6
+rings = 16
+ring_segments = 8
+
+[sub_resource type="StandardMaterial3D" id="mat_reticle"]
+shading_mode = 0
+albedo_color = Color(0.2, 0.92, 0.82, 1)
+emission_enabled = true
+emission = Color(0.2, 0.92, 0.82, 1)
+
+[node name="AimPreview" type="Node3D"]
+script = ExtResource("1_aim")
+
+[node name="Dots" type="MultiMeshInstance3D" parent="."]
+multimesh = SubResource("mm_dots")
+
+[node name="Reticle" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
+visible = false
+mesh = SubResource("mesh_torus")
+material_override = SubResource("mat_reticle")

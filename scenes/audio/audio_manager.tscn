@@ -1,0 +1,34 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="Script" path="res://scripts/feedback/audio_manager.gd" id="1_audio"]
+[ext_resource type="AudioStream" path="res://assets/audio/rope_attach.wav" id="2_attach"]
+[ext_resource type="AudioStream" path="res://assets/audio/rope_wrap.wav" id="3_wrap"]
+[ext_resource type="AudioStream" path="res://assets/audio/land.wav" id="4_land"]
+[ext_resource type="AudioStream" path="res://assets/audio/grip_critical.wav" id="5_crit"]
+[ext_resource type="AudioStream" path="res://assets/audio/fell.wav" id="6_fell"]
+[ext_resource type="AudioStream" path="res://assets/audio/goal.wav" id="7_goal"]
+[ext_resource type="AudioStream" path="res://assets/audio/whoosh.wav" id="8_whoosh"]
+
+[node name="AudioManager" type="Node"]
+script = ExtResource("1_audio")
+
+[node name="RopeAttach" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_attach")
+
+[node name="RopeWrap" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_wrap")
+
+[node name="Land" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_land")
+
+[node name="GripCritical" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_crit")
+
+[node name="Fell" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_fell")
+
+[node name="Goal" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_goal")
+
+[node name="Whoosh" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_whoosh")

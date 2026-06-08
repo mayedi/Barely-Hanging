@@ -1,38 +1,21 @@
 class_name RopeView
 extends Node3D
-## Draws the rope as a thin camera-facing ribbon through its hinge polyline, plus a small
-## marker at the far end (the hook tip / anchor). Used both for the in-flight hook line
-## (player -> hook) and the attached rope (player -> hinges -> anchor). Presentation only:
-## the player feeds it world-space points each frame.
+## Draws the rope as a thin camera-facing ribbon through its hinge polyline, plus a marker
+## at the far end (the hook tip / anchor). The nodes + materials are AUTHORED in
+## rope_view.tscn; only the ribbon geometry is rebuilt each frame here (it is genuinely
+## dynamic — it follows the live hinge positions). Used both for the in-flight hook line
+## and the attached rope. Presentation only: the player feeds it world-space points.
 
 const FORE_Z: float = 0.18      ## sit in front of platforms (front faces at z=0)
 const HALF_WIDTH: float = 0.07
 
-var _ribbon: MeshInstance3D
+@onready var _ribbon: MeshInstance3D = $Ribbon
+@onready var _tip: MeshInstance3D = $Tip
+
 var _im: ImmediateMesh
-var _tip: MeshInstance3D
 
 func _ready() -> void:
-	_im = ImmediateMesh.new()
-	_ribbon = MeshInstance3D.new()
-	_ribbon.mesh = _im
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.16, 0.13, 0.11)
-	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	mat.cull_mode = BaseMaterial3D.CULL_DISABLED
-	_ribbon.material_override = mat
-	add_child(_ribbon)
-
-	_tip = MeshInstance3D.new()
-	var s := SphereMesh.new()
-	s.radius = 0.17
-	s.height = 0.34
-	_tip.mesh = s
-	var tmat := StandardMaterial3D.new()
-	tmat.albedo_color = Color(0.10, 0.72, 0.62)
-	tmat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	_tip.material_override = tmat
-	add_child(_tip)
+	_im = _ribbon.mesh
 	clear()
 
 ## `points` is player-first: [player, hinge.., far_end]. Builds a quad strip in the XY

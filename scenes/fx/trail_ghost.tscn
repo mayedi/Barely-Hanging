@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/feedback/trail_ghost.gd" id="1_ghost"]
+
+[sub_resource type="StandardMaterial3D" id="mat_ghost"]
+resource_local_to_scene = true
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.94, 0.51, 0.18, 0.45)
+
+[sub_resource type="SphereMesh" id="mesh_ghost"]
+radius = 0.55
+height = 1.1
+radial_segments = 10
+rings = 6
+
+[node name="TrailGhost" type="MeshInstance3D"]
+mesh = SubResource("mesh_ghost")
+material_override = SubResource("mat_ghost")
+script = ExtResource("1_ghost")

@@ -18,6 +18,7 @@ func _ready() -> void:
 	_t_wrap()
 	_t_unwrap()
 	_t_pump()
+	_t_no_loop()
 	_t_progress()
 	_t_goal()
 	if _fail == 0:
@@ -103,24 +104,34 @@ func _t_unwrap() -> void:
 	rope.unwrap(PhysicsPoint.new(Vector2(-10, 0)))
 	_ok(rope.hinges.size() == 1, "unwrap pops hinge when winding flips")
 
+const SWING_LEN: float = 8.0   ## test pivot at origin, so the top of the loop is y = +SWING_LEN
+
 ## Well-timed pumping must build amplitude across swings (spec §6.4). Compare the peak
 ## height of a pumped pendulum against an un-pumped one from the same start.
 func _t_pump() -> void:
-	var pumped := _swing_peak(true)
-	var coasting := _swing_peak(false)
+	var pumped := _swing_peak(true, 720)
+	var coasting := _swing_peak(false, 720)
 	_ok(pumped > coasting + 1.0,
 		"pumping builds amplitude (pumped peak %.2f > coast %.2f)" % [pumped, coasting])
 
-## Returns the highest y reached over ~6 s of swinging from a fixed small displacement.
-func _swing_peak(do_pump: bool) -> float:
+## A heavy, realistic swing must PLATEAU below the top — even with perfectly-timed pumping
+## for a long time it can never loop over (no 360). It must still reach a useful amplitude.
+func _t_no_loop() -> void:
+	var peak := _swing_peak(true, 4000)
+	_ok(peak < SWING_LEN * 0.75,
+		"swing cannot loop over the top (peak %.2f < %.2f)" % [peak, SWING_LEN * 0.75])
+	_ok(peak > -SWING_LEN * 0.2,
+		"swing still builds a useful amplitude (peak %.2f)" % peak)
+
+## Returns the highest y reached over `steps` of swinging from a fixed small displacement.
+func _swing_peak(do_pump: bool, steps: int) -> float:
 	var config := GameDirector.config
 	var pivot := Vector2(0, 0)
-	var length := 8.0
-	var rope := Rope.new(pivot, length, config)
-	var p := PhysicsPoint.new(Vector2(2.0, -sqrt(length * length - 4.0)))
+	var rope := Rope.new(pivot, SWING_LEN, config)
+	var p := PhysicsPoint.new(Vector2(2.0, -sqrt(SWING_LEN * SWING_LEN - 4.0)))
 	var dt := 1.0 / 120.0
 	var peak := p.pos.y
-	for _i in 720:
+	for _i in steps:
 		p.integrate(config.gravity, config.damping, dt)
 		if do_pump:
 			_pump_with_motion(p, pivot, config, dt)

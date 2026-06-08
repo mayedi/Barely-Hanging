@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3]
+
+[sub_resource type="StandardMaterial3D" id="mat_parallax"]
+resource_local_to_scene = true
+shading_mode = 0
+albedo_color = Color(0.2, 0.22, 0.28, 1)
+
+[sub_resource type="BoxMesh" id="mesh_parallax"]
+resource_local_to_scene = true
+material = SubResource("mat_parallax")
+size = Vector3(6, 8, 3)
+
+[node name="ParallaxBox" type="MeshInstance3D"]
+mesh = SubResource("mesh_parallax")
