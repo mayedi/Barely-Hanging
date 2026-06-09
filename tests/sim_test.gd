@@ -16,6 +16,7 @@ func _ready() -> void:
 	_t_seg_hits_box()
 	_t_first_hit()
 	_t_wrap()
+	_t_no_self_wrap()
 	_t_unwrap()
 	_t_pump()
 	_t_no_loop()
@@ -93,6 +94,16 @@ func _t_wrap() -> void:
 		var corner: Vector2 = rope.hinges[1].pos
 		var corners := AabbUtil.box_corners(plat.center, plat.half)
 		_ok(corners.has(corner), "wrap hinge sits on a real corner")
+
+## The rope must never wrap the platform its anchor sits on — that false wrap is what
+## teleported the player up when the hook landed on top of a platform.
+func _t_no_self_wrap() -> void:
+	var config := GameDirector.config
+	var plat := PlatformRect.new(Vector2(0, 0), Vector2(4, 4), 0)
+	var rope := Rope.new(Vector2(0, 5), 100.0, config, 0)   # anchor sits ON platform 0
+	var p := PhysicsPoint.new(Vector2(-3, -5))              # segment crosses platform 0
+	rope.wrap(p, [plat])
+	_ok(rope.hinges.size() == 1, "rope never wraps its own anchor platform (no teleport)")
 
 func _t_unwrap() -> void:
 	var config := GameDirector.config

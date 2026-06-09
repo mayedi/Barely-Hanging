@@ -21,11 +21,13 @@ class Hinge:
 
 var hinges: Array[Hinge] = []
 var length: float = 0.0          ## total rope budget (world units)
+var anchor_platform: int = -1    ## platform the anchor sits ON — never wrapped (see wrap())
 var _config: GameConfig
 
-func _init(anchor: Vector2, total_length: float, config: GameConfig) -> void:
+func _init(anchor: Vector2, total_length: float, config: GameConfig, anchor_platform_index: int = -1) -> void:
 	hinges = [Hinge.new(anchor, 0)]
 	length = total_length
+	anchor_platform = anchor_platform_index
 	_config = config
 
 func anchor() -> Vector2:
@@ -94,6 +96,12 @@ func wrap(player: PhysicsPoint, platforms: Array) -> void:
 	var a := active_pivot()
 	var p := player.pos
 	for plat: PlatformRect in platforms:
+		# Never wrap the platform the anchor is stuck to. Its surface is coincident with the
+		# anchor, so the rope always "enters" it — wrapping there has no clean graze point and
+		# the sudden length drop would teleport the player to the corner. Other platforms wrap
+		# normally (their graze transition is smooth).
+		if plat.index == anchor_platform:
+			continue
 		var shrink := _config.wrap_shrink
 		var minp := plat.min_corner() + Vector2(shrink, shrink)
 		var maxp := plat.max_corner() - Vector2(shrink, shrink)

@@ -177,7 +177,8 @@ func _advance_hook(delta: float) -> void:
 
 func _attach_rope(at: Vector2, platform_index: int) -> void:
 	# Chaining: a fresh hook replaces any existing rope with no rest (spec §3 mastery path).
-	_rope = Rope.new(at, _point.pos.distance_to(at), config)
+	# Pass the anchor's platform so the rope never wraps it (prevents the attach teleport).
+	_rope = Rope.new(at, _point.pos.distance_to(at), config, platform_index)
 	EventBus.rope_attached.emit(at, platform_index)
 
 func _drop_rope() -> void:
