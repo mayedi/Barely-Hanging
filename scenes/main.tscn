@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/level/level.gd" id="2_level"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" path="res://scenes/debug/debug_view.tscn" id="8_debug"]
 [ext_resource type="Environment" path="res://resources/env/world_environment.tres" id="9_env"]
 [ext_resource type="PackedScene" path="res://scenes/level/backdrop.tscn" id="10_backdrop"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="11_pause"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_main")
@@ -44,3 +45,5 @@ script = ExtResource("3_cam")
 [node name="HUD" parent="." instance=ExtResource("7_hud")]
 
 [node name="DebugView" parent="." instance=ExtResource("8_debug")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("11_pause")]

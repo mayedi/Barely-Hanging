@@ -75,6 +75,7 @@ func _setup_input_map() -> void:
 	_add_key("release", KEY_SPACE)
 	_add_key("reset", KEY_R)
 	_add_key("debug_toggle", KEY_F3)
+	_add_key("pause", KEY_ESCAPE)
 	_add_mouse("throw", MOUSE_BUTTON_LEFT)
 
 func _add_key(action: StringName, keycode: Key) -> void:
