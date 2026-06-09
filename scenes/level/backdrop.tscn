@@ -1,0 +1,56 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/backdrop/bg_far.png" id="1_far"]
+[ext_resource type="Texture2D" path="res://assets/backdrop/bg_mid.png" id="2_mid"]
+[ext_resource type="Texture2D" path="res://assets/backdrop/bg_near.png" id="3_near"]
+[ext_resource type="Texture2D" path="res://assets/backdrop/bg_clouds.png" id="4_clouds"]
+
+[sub_resource type="QuadMesh" id="quad"]
+size = Vector2(1, 1)
+
+[sub_resource type="StandardMaterial3D" id="mat_far"]
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("1_far")
+
+[sub_resource type="StandardMaterial3D" id="mat_mid"]
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("2_mid")
+
+[sub_resource type="StandardMaterial3D" id="mat_near"]
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("3_near")
+
+[sub_resource type="StandardMaterial3D" id="mat_clouds"]
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("4_clouds")
+
+[node name="Backdrop" type="Node3D"]
+
+[node name="CloudsHigh" type="MeshInstance3D" parent="."]
+transform = Transform3D(340, 0, 0, 0, 80, 0, 0, 0, 1, 0, 44, -118)
+mesh = SubResource("quad")
+material_override = SubResource("mat_clouds")
+
+[node name="MountainsFar" type="MeshInstance3D" parent="."]
+transform = Transform3D(320, 0, 0, 0, 130, 0, 0, 0, 1, 0, 6, -130)
+mesh = SubResource("quad")
+material_override = SubResource("mat_far")
+
+[node name="MountainsMid" type="MeshInstance3D" parent="."]
+transform = Transform3D(240, 0, 0, 0, 95, 0, 0, 0, 1, 0, 2, -95)
+mesh = SubResource("quad")
+material_override = SubResource("mat_mid")
+
+[node name="CloudsLow" type="MeshInstance3D" parent="."]
+transform = Transform3D(240, 0, 0, 0, 64, 0, 0, 0, 1, 0, 21, -74)
+mesh = SubResource("quad")
+material_override = SubResource("mat_clouds")
+
+[node name="MountainsNear" type="MeshInstance3D" parent="."]
+transform = Transform3D(175, 0, 0, 0, 72, 0, 0, 0, 1, 0, -3, -60)
+mesh = SubResource("quad")
+material_override = SubResource("mat_near")

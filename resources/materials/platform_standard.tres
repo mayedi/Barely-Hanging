@@ -1,5 +1,35 @@
-[gd_resource type="StandardMaterial3D" format=3]
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://41krj5se04hq"]
+
+[sub_resource type="FastNoiseLite" id="fnl_albedo"]
+noise_type = 2
+frequency = 0.045
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="tex_albedo"]
+width = 256
+height = 256
+noise = SubResource("fnl_albedo")
+seamless = true
+
+[sub_resource type="FastNoiseLite" id="fnl_normal"]
+noise_type = 3
+frequency = 0.09
+fractal_octaves = 4
+
+[sub_resource type="NoiseTexture2D" id="tex_normal"]
+width = 256
+height = 256
+noise = SubResource("fnl_normal")
+seamless = true
+as_normal_map = true
+bump_strength = 6.0
 
 [resource]
-albedo_color = Color(0.48, 0.47, 0.46, 1)
-roughness = 0.9
+albedo_color = Color(0.62, 0.55, 0.48, 1)
+albedo_texture = SubResource("tex_albedo")
+roughness = 0.85
+normal_enabled = true
+normal_scale = 0.8
+normal_texture = SubResource("tex_normal")
+uv1_scale = Vector3(0.4, 0.4, 0.4)
+uv1_triplanar = true

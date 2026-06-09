@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://dl6n6od137otc"]
 
 [sub_resource type="StandardMaterial3D" id="mat_parallax"]
 resource_local_to_scene = true
@@ -10,5 +10,5 @@ resource_local_to_scene = true
 material = SubResource("mat_parallax")
 size = Vector3(6, 8, 3)
 
-[node name="ParallaxBox" type="MeshInstance3D"]
+[node name="ParallaxBox" type="MeshInstance3D" unique_id=1489243285]
 mesh = SubResource("mesh_parallax")

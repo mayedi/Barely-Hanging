@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" path="res://scripts/level/level.gd" id="2_level"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
 [ext_resource type="PackedScene" path="res://scenes/debug/debug_view.tscn" id="8_debug"]
 [ext_resource type="Environment" path="res://resources/env/world_environment.tres" id="9_env"]
+[ext_resource type="PackedScene" path="res://scenes/level/backdrop.tscn" id="10_backdrop"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_main")
@@ -18,13 +19,15 @@ environment = ExtResource("9_env")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.788011, 0, 0.615662, 0.485148, 0.615662, -0.620961, -0.379039, 0.788011, 0.485148, 0, 0, 0)
-light_color = Color(1, 0.95, 0.86, 1)
-light_energy = 1.15
+light_color = Color(1, 0.87, 0.72, 1)
+light_energy = 1.2
 
 [node name="Fill" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.707107, 0, -0.707107, -0.218508, 0.951057, 0.218508, 0.672499, 0.309017, -0.672499, 0, 0, 0)
-light_color = Color(0.66, 0.76, 1, 1)
-light_energy = 0.35
+light_color = Color(0.5, 0.6, 0.88, 1)
+light_energy = 0.4
+
+[node name="Backdrop" parent="." instance=ExtResource("10_backdrop")]
 
 [node name="Level" type="Node3D" parent="."]
 script = ExtResource("2_level")

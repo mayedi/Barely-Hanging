@@ -1,10 +1,12 @@
-[gd_resource type="Environment" load_steps=3 format=3]
+[gd_resource type="Environment" format=3 uid="uid://kklimujvkegn"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sky"]
-sky_top_color = Color(0.07, 0.1, 0.19, 1)
-sky_horizon_color = Color(0.42, 0.4, 0.48, 1)
-ground_horizon_color = Color(0.28, 0.27, 0.31, 1)
-ground_bottom_color = Color(0.1, 0.11, 0.14, 1)
+sky_top_color = Color(0.13, 0.14, 0.34, 1)
+sky_horizon_color = Color(0.92, 0.64, 0.43, 1)
+sky_curve = 0.12
+ground_bottom_color = Color(0.2, 0.17, 0.26, 1)
+ground_horizon_color = Color(0.6, 0.45, 0.42, 1)
+ground_curve = 0.05
 
 [sub_resource type="Sky" id="Sky_main"]
 sky_material = SubResource("ProceduralSkyMaterial_sky")
@@ -13,12 +15,12 @@ sky_material = SubResource("ProceduralSkyMaterial_sky")
 background_mode = 2
 sky = SubResource("Sky_main")
 ambient_light_source = 3
-ambient_light_energy = 0.75
+ambient_light_energy = 0.9
 tonemap_mode = 2
 glow_enabled = true
-glow_intensity = 0.5
-glow_bloom = 0.1
+glow_intensity = 0.55
+glow_bloom = 0.12
 fog_enabled = true
-fog_light_color = Color(0.3, 0.36, 0.5, 1)
-fog_density = 0.0035
-fog_sky_affect = 0.1
+fog_light_color = Color(0.62, 0.55, 0.55, 1)
+fog_density = 0.003
+fog_sky_affect = 0.0
