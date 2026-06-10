@@ -1,49 +1,41 @@
 extends Node
-## Autoload "GameDirector" — owns the high-level run lifecycle and is the single
-## source of truth for the active config, level data and platform rects (spec §5.2).
+## Autoload "GameDirector" — owns the high-level run lifecycle and is the single source of
+## truth for the active config and platform rects (spec §5.2).
 ##
-## Responsibilities:
-##   * set the fixed 120 Hz physics rate (the rope/wrapping are stability-sensitive),
-##   * register the input map in code (robust, no fragile project.godot hand-editing),
-##   * build the typed platform list the whole sim queries,
-##   * own run state (PLAYING / WON), handle reset, and the dread ProgressTracker.
-## It holds NO per-frame gameplay logic — the player drives the simulation.
+## The platform list and start position now come from the LEVEL SCENE (level.tscn calls
+## set_level in its _ready, before the player simulates) rather than a data resource, so the
+## level is edited by placing nodes in the editor. GameDirector just holds what the scene
+## hands it, owns run state (PLAYING / WON), handles reset, and the dread ProgressTracker.
 
 enum State { PLAYING, WON }
 
 const PHYSICS_TICKS := 120
 
 @export var config: GameConfig = preload("res://resources/default_config.tres")
-@export var level_data: LevelData = preload("res://resources/levels/level_01.tres")
 
 var state: State = State.PLAYING
 var platforms: Array[PlatformRect] = []
 var progress: ProgressTracker
 var debug_draw: bool = false
 
+var _start_pos: Vector2 = Vector2(0, 1)
+
 func _ready() -> void:
 	Engine.physics_ticks_per_second = PHYSICS_TICKS
 	_setup_input_map()
-	_build_platforms()
-	progress = ProgressTracker.new(platforms, config, level_data.start_pos)
 	EventBus.reached_goal.connect(_on_reached_goal)
 
-func _build_platforms() -> void:
-	platforms.clear()
-	var i := 0
-	for plat in level_data.platforms:
-		var rect := PlatformRect.new(plat["center"], plat["size"], i)
-		rect.is_ground = LevelData.flag(plat, "is_ground")
-		rect.is_goal = LevelData.flag(plat, "is_goal")
-		rect.is_checkpoint = LevelData.flag(plat, "is_checkpoint")
-		platforms.append(rect)
-		i += 1
+## Called by the level scene (level.gd) at load with the platforms it contains.
+func set_level(rects: Array[PlatformRect], start_pos: Vector2) -> void:
+	platforms = rects
+	_start_pos = start_pos
+	progress = ProgressTracker.new(platforms, config, start_pos)
 
 func get_start_pos() -> Vector2:
-	return level_data.start_pos
+	return _start_pos
 
 func get_checkpoint_pos() -> Vector2:
-	return progress.checkpoint_pos if progress != null else level_data.start_pos
+	return progress.checkpoint_pos if progress != null else _start_pos
 
 func goal_platform() -> PlatformRect:
 	for plat in platforms:

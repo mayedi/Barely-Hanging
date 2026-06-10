@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/level/level.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/level/platform_view.tscn" id="2_plat"]
+
+[node name="Level" type="Node3D"]
+script = ExtResource("1_level")
+
+[node name="Start" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Ground" parent="." instance=ExtResource("2_plat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+size = Vector2(54, 4)
+platform_type = 1
+
+[node name="P1" parent="." instance=ExtResource("2_plat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 6, 0)
+size = Vector2(16, 2.6)
+
+[node name="P2" parent="." instance=ExtResource("2_plat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 12, 0)
+size = Vector2(14, 2.6)
+platform_type = 2
+
+[node name="P3" parent="." instance=ExtResource("2_plat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 19, 0)
+size = Vector2(13, 2.6)
+
+[node name="P4" parent="." instance=ExtResource("2_plat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 26, 0)
+size = Vector2(12, 2.6)
+
+[node name="P5" parent="." instance=ExtResource("2_plat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 33, 0)
+size = Vector2(11, 2.6)
+platform_type = 2
+
+[node name="P6" parent="." instance=ExtResource("2_plat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 40, 0)
+size = Vector2(10, 2.6)
+
+[node name="P7" parent="." instance=ExtResource("2_plat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 47, 0)
+size = Vector2(10, 2.6)
+platform_type = 2
+
+[node name="P8" parent="." instance=ExtResource("2_plat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 55, 0)
+size = Vector2(9, 2.6)
+
+[node name="P9" parent="." instance=ExtResource("2_plat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 63, 0)
+size = Vector2(8, 2.6)
+platform_type = 2
+
+[node name="P10" parent="." instance=ExtResource("2_plat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 71, 0)
+size = Vector2(8, 2.6)
+
+[node name="P11" parent="." instance=ExtResource("2_plat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 79, 0)
+size = Vector2(7, 2.6)
+
+[node name="Goal" parent="." instance=ExtResource("2_plat")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 87, 0)
+size = Vector2(18, 3.5)
+platform_type = 3

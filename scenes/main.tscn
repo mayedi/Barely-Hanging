@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" path="res://scripts/level/level.gd" id="2_level"]
+[ext_resource type="PackedScene" path="res://scenes/level/level.tscn" id="2_level"]
 [ext_resource type="Script" path="res://scripts/camera/game_camera.gd" id="3_cam"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="4_player"]
 [ext_resource type="PackedScene" path="res://scenes/player/rope_view.tscn" id="5_rope"]
@@ -30,8 +30,7 @@ light_energy = 0.4
 
 [node name="Backdrop" parent="." instance=ExtResource("10_backdrop")]
 
-[node name="Level" type="Node3D" parent="."]
-script = ExtResource("2_level")
+[node name="Level" parent="." instance=ExtResource("2_level")]
 
 [node name="GameCamera" type="Camera3D" parent="."]
 script = ExtResource("3_cam")

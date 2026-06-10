@@ -1,44 +1,11 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://scripts/level/platform_view.gd" id="1_pv"]
+[ext_resource type="Material" path="res://resources/materials/platform_standard.tres" id="2_mat"]
 
-[sub_resource type="BoxMesh" id="mesh_box"]
-resource_local_to_scene = true
-size = Vector3(2, 1.4, 2.4)
-
-[sub_resource type="StandardMaterial3D" id="mat_marker"]
-albedo_color = Color(0.1, 0.7, 0.62, 1)
-emission_enabled = true
-emission = Color(0.1, 0.7, 0.62, 1)
-emission_energy_multiplier = 1.4
-
-[sub_resource type="BoxMesh" id="mesh_marker"]
-resource_local_to_scene = true
-material = SubResource("mat_marker")
-size = Vector3(1.7, 0.12, 1.44)
-
-[sub_resource type="StandardMaterial3D" id="mat_beacon"]
-transparency = 1
-shading_mode = 0
-albedo_color = Color(0.5, 0.95, 0.85, 0.18)
-emission_enabled = true
-emission = Color(0.4, 0.95, 0.85, 1)
-emission_energy_multiplier = 1.0
-
-[sub_resource type="CylinderMesh" id="mesh_beacon"]
-material = SubResource("mat_beacon")
-top_radius = 0.25
-bottom_radius = 0.6
-height = 14.0
-
-[node name="PlatformView" type="MeshInstance3D"]
-mesh = SubResource("mesh_box")
+[node name="PlatformView" type="Node3D"]
 script = ExtResource("1_pv")
 
-[node name="CheckpointMarker" type="MeshInstance3D" parent="."]
-visible = false
-mesh = SubResource("mesh_marker")
-
-[node name="GoalBeacon" type="MeshInstance3D" parent="."]
-visible = false
-mesh = SubResource("mesh_beacon")
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.5)
+material_override = ExtResource("2_mat")

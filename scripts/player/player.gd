@@ -44,6 +44,9 @@ func setup(camera: GameCamera, rope_view: RopeView, aim_preview: AimPreview) -> 
 	_aim_preview = aim_preview
 	if camera != null and aim_preview != null:
 		_throw = ThrowController.new(camera, aim_preview, config)
+	# The level scene has now registered its start position with GameDirector; spawn there.
+	_point.place(GameDirector.get_start_pos())
+	_update_visual()
 	_maybe_demo()
 
 # --- queries used by the camera (continuous follow is inherently coupled) -----

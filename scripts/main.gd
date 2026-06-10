@@ -16,15 +16,12 @@ func _wire() -> void:
 	var rope_view := get_node_or_null("RopeView") as RopeView
 	var aim_preview := get_node_or_null("AimPreview") as AimPreview
 	var debug_view := get_node_or_null("DebugView") as DebugView
-	var level := get_node_or_null("Level") as Level
 	if player != null:
 		player.setup(camera, rope_view, aim_preview)
 	if camera != null and player != null:
 		camera.setup(player)
 	if debug_view != null and player != null:
 		debug_view.setup(player)
-	if level != null and player != null:
-		level.set_player(player)
 
 # --- dev screenshot hook (verification only) ---------------------------------
 func _maybe_capture() -> void:

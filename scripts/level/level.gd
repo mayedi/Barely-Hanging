@@ -1,23 +1,20 @@
 class_name Level
 extends Node3D
-## Builds the playable platforms from data (spec §5.5). Atmospheric depth now comes from the
-## authored painted parallax backdrop (backdrop.tscn) rather than scattered boxes. Presentation
-## only: the simulation queries GameDirector.platforms, never these nodes.
-
-const PlatformViewScene: PackedScene = preload("res://scenes/level/platform_view.tscn")
-
-var _player: Node = null
+## The level as a SCENE: platforms are PlatformView nodes placed directly in level.tscn —
+## move and resize them in the editor. A "Start" node marks the spawn point. At runtime this
+## reads the placed platforms into the simulation's platform list + start position and hands
+## them to GameDirector. Presentation + level data; no per-frame logic.
 
 func _ready() -> void:
-	_build_platforms()
-
-## Composition root hands in the player. Kept for when variant/orientation hints return;
-## unused for now (all platforms are plain).
-func set_player(player: Node) -> void:
-	_player = player
-
-func _build_platforms() -> void:
-	for rect in GameDirector.platforms:
-		var view: PlatformView = PlatformViewScene.instantiate()
-		add_child(view)
-		view.setup(rect)
+	var rects: Array[PlatformRect] = []
+	var index := 0
+	for child in get_children():
+		var platform := child as PlatformView
+		if platform != null:
+			rects.append(platform.make_rect(index))
+			index += 1
+	var start_pos := Vector2(0.0, 1.0)
+	var start_node := get_node_or_null(^"Start") as Node3D
+	if start_node != null:
+		start_pos = Vector2(start_node.position.x, start_node.position.y)
+	GameDirector.set_level(rects, start_pos)

@@ -7,5 +7,6 @@
 script = ExtResource("1_player")
 
 [node name="Visual" type="Node3D" parent="."]
+transform = Transform3D(1.6, 0, 0, 0, 1.6, 0, 0, 0, 1.6, 0, 0, 0)
 
 [node name="Creature" parent="Visual" instance=ExtResource("2_creature")]

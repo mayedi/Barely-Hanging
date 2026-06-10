@@ -9,6 +9,7 @@ var _fail: int = 0
 
 func _ready() -> void:
 	print("=== SIM TESTS ===")
+	_setup_test_level()
 	_t_verlet()
 	_t_aabb()
 	_t_constraint()
@@ -29,6 +30,22 @@ func _ready() -> void:
 	else:
 		printerr("FAILURES: ", _fail)
 	get_tree().quit(_fail)
+
+## The level now comes from the level scene (not loaded here), so the tests register their
+## own known platform set with GameDirector. Indices: 1 = ledge (5,5), 2 = checkpoint, 3 = goal.
+func _setup_test_level() -> void:
+	var rects: Array[PlatformRect] = []
+	var ground := PlatformRect.new(Vector2(0, -1), Vector2(46, 2), 0)
+	ground.is_ground = true
+	rects.append(ground)
+	rects.append(PlatformRect.new(Vector2(5, 5), Vector2(9, 1.4), 1))
+	var cp := PlatformRect.new(Vector2(-5, 10), Vector2(9, 1.4), 2)
+	cp.is_checkpoint = true
+	rects.append(cp)
+	var goal := PlatformRect.new(Vector2(0, 41), Vector2(11, 1.8), 3)
+	goal.is_goal = true
+	rects.append(goal)
+	GameDirector.set_level(rects, Vector2(0, 1))
 
 func _ok(cond: bool, msg: String) -> void:
 	if cond:
