@@ -12,6 +12,8 @@ func _ready() -> void:
 	_t_verlet()
 	_t_aabb()
 	_t_constraint()
+	_t_pull_clamp()
+	_t_no_fling()
 	_t_closest_point()
 	_t_seg_hits_box()
 	_t_first_hit()
@@ -57,14 +59,42 @@ func _t_aabb() -> void:
 func _t_constraint() -> void:
 	var config := GameDirector.config
 	var rope := Rope.new(Vector2(0, 0), 5.0, config)
-	var p := PhysicsPoint.new(Vector2(0, -10))
+	# A small overshoot (within the per-call pull budget) is corrected fully in one call.
+	var p := PhysicsPoint.new(Vector2(0, -5.3))
 	rope.solve(p, config.constraint_iterations)
 	_ok(_approx(p.pos.distance_to(Vector2(0, 0)), 5.0, 0.001),
-		"constraint pulls to active length (got %.4f)" % p.pos.distance_to(Vector2.ZERO))
+		"constraint pulls a small overshoot to active length (got %.4f)" % p.pos.distance_to(Vector2.ZERO))
 	# Radial-only correction must not move a point already inside the radius.
 	var inside := PhysicsPoint.new(Vector2(0, -3))
 	rope.solve(inside, config.constraint_iterations)
 	_ok(inside.pos == Vector2(0, -3), "constraint leaves slack point untouched")
+
+## A huge overshoot (e.g. a corner wrap collapsing the rope) must NOT snap in one step — the
+## inward pull is capped, so the player reels in smoothly instead of teleporting to the top.
+func _t_pull_clamp() -> void:
+	var config := GameDirector.config
+	var rope := Rope.new(Vector2(0, 0), 5.0, config)
+	var p := PhysicsPoint.new(Vector2(0, -10))            # 5 units beyond the active length
+	rope.solve(p, config.constraint_iterations)
+	var moved := 10.0 - p.pos.distance_to(Vector2(0, 0))
+	_ok(moved <= config.max_rope_pull + 0.001 and moved > 0.0,
+		"a big wrap snap is clamped (moved %.3f, cap %.3f)" % [moved, config.max_rope_pull])
+
+## The wrap fling: a player swinging fast on a long rope when a wrap abruptly shortens it.
+## The corrected solve must not inject a huge inward velocity — speed stays bounded.
+func _t_no_fling() -> void:
+	var config := GameDirector.config
+	var dt := 1.0 / 120.0
+	var rope := Rope.new(Vector2(0, 0), 15.0, config)
+	var p := PhysicsPoint.new(Vector2(0, -15))
+	p.prev_pos = p.pos - Vector2(24.0, 0.0) * dt          # swinging fast through the bottom
+	rope.hinges.append(Rope.Hinge.new(Vector2(0, -5), 1)) # a wrap drops active length 15 -> 5
+	var max_speed := 0.0
+	for _s in 60:
+		p.integrate(config.gravity, config.damping, dt)
+		rope.solve(p, config.constraint_iterations)
+		max_speed = maxf(max_speed, (p.pos - p.prev_pos).length() / dt)
+	_ok(max_speed < 45.0, "wrap on a fast rope does not fling the player (max speed %.1f)" % max_speed)
 
 func _t_closest_point() -> void:
 	var c := Vector2(0, 0)

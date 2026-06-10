@@ -26,6 +26,7 @@ extends Resource
 @export var constraint_iterations: int = 6
 @export var max_hinges: int = 6                ## rope-wrap depth cap
 @export var wrap_shrink: float = 0.05          ## interior shrink so edge-grazing never false-wraps
+@export var max_rope_pull: float = 0.4         ## max units the rope reels the player in per solve (anti-fling on a wrap)
 
 @export_group("Pump")
 @export var pump_accel: float = 24.0

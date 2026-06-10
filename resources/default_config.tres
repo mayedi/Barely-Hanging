@@ -18,6 +18,7 @@ rope_min_length = 1.4
 constraint_iterations = 6
 max_hinges = 6
 wrap_shrink = 0.05
+max_rope_pull = 0.4
 pump_accel = 10.0
 pump_align_boost = 1.95
 pump_counter = 0.55

@@ -47,16 +47,36 @@ func consumed_length() -> float:
 func active_length() -> float:
 	return maxf(_config.rope_min_length, length - consumed_length())
 
-## The distance constraint: pull the player back onto the active radius. Run several
-## iterations to stiffen it. Radial-only correction conserves tangential velocity.
+## The distance constraint: pull the player back onto the active radius, then let the taut
+## rope arrest its OUTWARD radial velocity while leaving the tangential velocity untouched
+## (that conservation is the pendulum). Two safeguards keep a corner wrap physical instead
+## of glitchy, no matter where the player is:
+##   1. The inward reposition is capped at `max_rope_pull` per call AND moves prev_pos with
+##      pos, so a sudden active-length drop (a wrap) reels the player in smoothly over a few
+##      frames WITHOUT injecting the inward velocity that used to fling them to the top.
+##   2. Only OUTWARD radial velocity is removed; inward motion (rope going slack, the player
+##      descending / reeling out) is always free.
 func solve(player: PhysicsPoint, iters: int) -> void:
 	var al := active_length()
 	var pv := active_pivot()
+	var budget := _config.max_rope_pull
 	for _i in iters:
 		var d := player.pos - pv
 		var dist := d.length()
-		if dist > al and dist > 0.0:
-			player.pos -= d * ((dist - al) / dist)
+		if dist > al and dist > 0.0 and budget > 0.0:
+			var pull := minf(dist - al, budget)
+			var corr := d * (pull / dist)
+			player.pos -= corr
+			player.prev_pos -= corr   # move prev WITH pos: the reposition adds no velocity
+			budget -= pull
+	# Taut rope: cancel outward radial velocity only. Slack (inward) motion stays free.
+	var d2 := player.pos - pv
+	var dist2 := d2.length()
+	if dist2 > al - 0.001 and dist2 > 0.0001:
+		var radial := d2 / dist2
+		var radial_vel := (player.pos - player.prev_pos).dot(radial)
+		if radial_vel > 0.0:
+			player.prev_pos += radial * radial_vel
 
 ## Reel: W shortens (down to the minimum), S lengthens. Shortening near the bottom of a
 ## swing injects energy — an intentional, emergent skill move (spec §6.3).
