@@ -22,6 +22,7 @@ var _rope: Rope = null
 var _aiming: bool = false
 var _grip: float = 1.0
 var _grip_critical_latched: bool = false
+var _exhausted: bool = false   ## grip hit 0: hands won't hold a rope until you land and recover
 
 # References handed in by the composition root (Main._wire).
 var _camera: GameCamera = null
@@ -127,7 +128,7 @@ func _emit_fast_motion() -> void:
 func _handle_input(delta: float) -> void:
 	if _throw == null:
 		return
-	if Input.is_action_just_pressed("throw") and not _throw.has_hook():
+	if Input.is_action_just_pressed("throw") and not _throw.has_hook() and not _exhausted:
 		_aiming = true
 	if _aiming:
 		var power := _throw.update_aim(_point.pos, delta)
@@ -179,6 +180,8 @@ func _advance_hook(delta: float) -> void:
 		_attach_rope(_throw.anchor, _throw.platform_index)
 
 func _attach_rope(at: Vector2, platform_index: int) -> void:
+	if _exhausted:
+		return                 # too tired to hold on — let the hook fizzle, keep falling
 	# Chaining: a fresh hook replaces any existing rope with no rest (spec §3 mastery path).
 	# Pass the anchor's platform so the rope never wraps it (prevents the attach teleport).
 	_rope = Rope.new(at, _point.pos.distance_to(at), config, platform_index)
@@ -196,10 +199,11 @@ func _update_grip(delta: float) -> void:
 		_set_grip(minf(1.0, _grip + config.grip_restore * delta))
 		if _grip > config.grip_warn:
 			_grip_critical_latched = false   # re-arm the one-shot critical warning
+			_exhausted = false               # caught your breath: you can grab again
 	elif _rope != null:
 		_set_grip(_grip - config.grip_drain * delta)
 		if _grip <= 0.0:
-			_fail()
+			_exhaust()
 
 func _set_grip(value: float) -> void:
 	var v := clampf(value, 0.0, 1.0)
@@ -211,22 +215,19 @@ func _set_grip(value: float) -> void:
 		_grip_critical_latched = true
 		EventBus.grip_critical.emit()
 
-## Grip ran out while hanging: drop the rope, fall, and (the dread cost, spec §14) snap
-## back to the last checkpoint, losing all the height climbed above it.
-func _fail() -> void:
+## Grip ran out while hanging: your hands let go and you fall from exactly where you are.
+## There is no teleport and no checkpoint rescue — the fall IS the punishment. If you were
+## badly placed you can drop a long way, even back to the bottom. You can't grab another
+## rope until you land somewhere and your grip recovers (see _update_grip).
+func _exhaust() -> void:
+	_exhausted = true
 	_rope = null
+	_aiming = false
+	if _throw != null:
+		_throw.cancel()        # kill any in-flight hook so it can't re-grab mid-fall
+	EventBus.aim_updated.emit(false, 0.0)
 	EventBus.rope_dropped.emit()
 	EventBus.player_fell.emit()
-	if config.fall_to_checkpoint:
-		_respawn_at(GameDirector.get_checkpoint_pos())
-
-func _respawn_at(pos: Vector2) -> void:
-	_point.place(pos)
-	_grounded = false
-	_ground_index = -1
-	_grip_critical_latched = false
-	_set_grip(config.respawn_grip)
-	EventBus.player_respawned.emit(pos)
 
 # --- events ------------------------------------------------------------------
 func _on_landed(vy_before: float) -> void:
@@ -258,6 +259,7 @@ func _on_run_reset() -> void:
 	_aiming = false
 	_grip = 1.0
 	_grip_critical_latched = false
+	_exhausted = false
 	_last_height_int = 2147483647
 	EventBus.grip_changed.emit(1.0)
 	if _throw != null:

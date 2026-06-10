@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=24 format=3]
 
 [ext_resource type="Script" path="res://scripts/level/backdrop.gd" id="0_bd"]
 [ext_resource type="Texture2D" path="res://assets/backdrop/bg_sun.png" id="1_sun"]
@@ -52,6 +52,18 @@ albedo_texture = ExtResource("6_cl")
 [sub_resource type="StandardMaterial3D" id="mat_cl"]
 transparency = 1
 shading_mode = 0
+albedo_texture = ExtResource("7_cl2")
+
+[sub_resource type="StandardMaterial3D" id="mat_sea1"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.91, 0.85, 1)
+albedo_texture = ExtResource("6_cl")
+
+[sub_resource type="StandardMaterial3D" id="mat_sea2"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.89, 0.83, 1)
 albedo_texture = ExtResource("7_cl2")
 
 [sub_resource type="StandardMaterial3D" id="mat_dust"]
@@ -108,6 +120,16 @@ material_override = SubResource("mat_cl")
 transform = Transform3D(135, 0, 0, 0, 68, 0, 0, 0, 1, 0, -14, -44)
 mesh = SubResource("quad")
 material_override = SubResource("mat_fore")
+
+[node name="CloudSeaFar" type="MeshInstance3D" parent="."]
+transform = Transform3D(230, 0, 0, 0, 64, 0, 0, 0, 1, -10, -6, -30)
+mesh = SubResource("quad")
+material_override = SubResource("mat_sea1")
+
+[node name="CloudSeaNear" type="MeshInstance3D" parent="."]
+transform = Transform3D(180, 0, 0, 0, 50, 0, 0, 0, 1, 14, -11, -17)
+mesh = SubResource("quad")
+material_override = SubResource("mat_sea2")
 
 [node name="DustFar" type="CPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)

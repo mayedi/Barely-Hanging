@@ -17,6 +17,8 @@ const LAYERS: Dictionary = {
 	"MountainsNear": {"factor": 0.60, "drift": 0.0},
 	"CloudsLow": {"factor": 0.52, "drift": 0.015},
 	"MountainsFore": {"factor": 0.38, "drift": 0.0},
+	"CloudSeaFar": {"factor": 0.30, "drift": 0.010},
+	"CloudSeaNear": {"factor": 0.16, "drift": 0.022},
 }
 
 @onready var _dust_far: CPUParticles3D = $DustFar

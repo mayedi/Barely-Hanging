@@ -1,0 +1,39 @@
+[gd_resource type="StandardMaterial3D" load_steps=6 format=3]
+
+[sub_resource type="Gradient" id="ramp_leaf"]
+offsets = PackedFloat32Array(0, 0.5, 1)
+colors = PackedColorArray(0.17, 0.31, 0.12, 1, 0.31, 0.47, 0.2, 1, 0.46, 0.62, 0.3, 1)
+
+[sub_resource type="FastNoiseLite" id="fnl_leaf"]
+noise_type = 2
+frequency = 0.16
+fractal_octaves = 3
+
+[sub_resource type="NoiseTexture2D" id="tex_leaf"]
+width = 256
+height = 256
+noise = SubResource("fnl_leaf")
+seamless = true
+color_ramp = SubResource("ramp_leaf")
+
+[sub_resource type="FastNoiseLite" id="fnl_leaf_n"]
+noise_type = 2
+frequency = 0.22
+fractal_octaves = 4
+
+[sub_resource type="NoiseTexture2D" id="tex_leaf_n"]
+width = 256
+height = 256
+noise = SubResource("fnl_leaf_n")
+seamless = true
+as_normal_map = true
+bump_strength = 5.0
+
+[resource]
+roughness = 0.9
+albedo_texture = SubResource("tex_leaf")
+normal_enabled = true
+normal_scale = 1.0
+normal_texture = SubResource("tex_leaf_n")
+uv1_scale = Vector3(0.7, 0.7, 0.7)
+uv1_triplanar = true
