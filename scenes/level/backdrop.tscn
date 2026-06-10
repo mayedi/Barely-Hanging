@@ -1,56 +1,142 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=22 format=3]
 
-[ext_resource type="Texture2D" path="res://assets/backdrop/bg_far.png" id="1_far"]
-[ext_resource type="Texture2D" path="res://assets/backdrop/bg_mid.png" id="2_mid"]
-[ext_resource type="Texture2D" path="res://assets/backdrop/bg_near.png" id="3_near"]
-[ext_resource type="Texture2D" path="res://assets/backdrop/bg_clouds.png" id="4_clouds"]
+[ext_resource type="Script" path="res://scripts/level/backdrop.gd" id="0_bd"]
+[ext_resource type="Texture2D" path="res://assets/backdrop/bg_sun.png" id="1_sun"]
+[ext_resource type="Texture2D" path="res://assets/backdrop/bg_far.png" id="2_far"]
+[ext_resource type="Texture2D" path="res://assets/backdrop/bg_mid.png" id="3_mid"]
+[ext_resource type="Texture2D" path="res://assets/backdrop/bg_near.png" id="4_near"]
+[ext_resource type="Texture2D" path="res://assets/backdrop/bg_fore.png" id="5_fore"]
+[ext_resource type="Texture2D" path="res://assets/backdrop/bg_clouds.png" id="6_cl"]
+[ext_resource type="Texture2D" path="res://assets/backdrop/bg_clouds2.png" id="7_cl2"]
+[ext_resource type="Texture2D" path="res://assets/backdrop/bg_dot.png" id="8_dot"]
 
 [sub_resource type="QuadMesh" id="quad"]
 size = Vector2(1, 1)
 
+[sub_resource type="StandardMaterial3D" id="mat_sun"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+albedo_texture = ExtResource("1_sun")
+
 [sub_resource type="StandardMaterial3D" id="mat_far"]
 transparency = 1
 shading_mode = 0
-albedo_texture = ExtResource("1_far")
+albedo_texture = ExtResource("2_far")
 
 [sub_resource type="StandardMaterial3D" id="mat_mid"]
 transparency = 1
 shading_mode = 0
-albedo_texture = ExtResource("2_mid")
+albedo_texture = ExtResource("3_mid")
 
 [sub_resource type="StandardMaterial3D" id="mat_near"]
 transparency = 1
 shading_mode = 0
-albedo_texture = ExtResource("3_near")
+albedo_texture = ExtResource("4_near")
 
-[sub_resource type="StandardMaterial3D" id="mat_clouds"]
+[sub_resource type="StandardMaterial3D" id="mat_fore"]
 transparency = 1
 shading_mode = 0
-albedo_texture = ExtResource("4_clouds")
+albedo_texture = ExtResource("5_fore")
+
+[sub_resource type="StandardMaterial3D" id="mat_ch"]
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("7_cl2")
+
+[sub_resource type="StandardMaterial3D" id="mat_cm"]
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("6_cl")
+
+[sub_resource type="StandardMaterial3D" id="mat_cl"]
+transparency = 1
+shading_mode = 0
+albedo_texture = ExtResource("7_cl2")
+
+[sub_resource type="StandardMaterial3D" id="mat_dust"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+billboard_mode = 3
+albedo_color = Color(1, 0.92, 0.78, 0.5)
+albedo_texture = ExtResource("8_dot")
+
+[sub_resource type="QuadMesh" id="dust_quad"]
+material = SubResource("mat_dust")
+size = Vector2(1, 1)
 
 [node name="Backdrop" type="Node3D"]
+script = ExtResource("0_bd")
 
-[node name="CloudsHigh" type="MeshInstance3D" parent="."]
-transform = Transform3D(340, 0, 0, 0, 80, 0, 0, 0, 1, 0, 44, -118)
+[node name="SunGlow" type="MeshInstance3D" parent="."]
+transform = Transform3D(150, 0, 0, 0, 150, 0, 0, 0, 1, -30, 22, -150)
 mesh = SubResource("quad")
-material_override = SubResource("mat_clouds")
+material_override = SubResource("mat_sun")
 
 [node name="MountainsFar" type="MeshInstance3D" parent="."]
-transform = Transform3D(320, 0, 0, 0, 130, 0, 0, 0, 1, 0, 6, -130)
+transform = Transform3D(250, 0, 0, 0, 135, 0, 0, 0, 1, 0, 0, -145)
 mesh = SubResource("quad")
 material_override = SubResource("mat_far")
 
+[node name="CloudsHigh" type="MeshInstance3D" parent="."]
+transform = Transform3D(300, 0, 0, 0, 95, 0, 0, 0, 1, 10, 40, -135)
+mesh = SubResource("quad")
+material_override = SubResource("mat_ch")
+
 [node name="MountainsMid" type="MeshInstance3D" parent="."]
-transform = Transform3D(240, 0, 0, 0, 95, 0, 0, 0, 1, 0, 2, -95)
+transform = Transform3D(205, 0, 0, 0, 108, 0, 0, 0, 1, 0, -3, -110)
 mesh = SubResource("quad")
 material_override = SubResource("mat_mid")
 
-[node name="CloudsLow" type="MeshInstance3D" parent="."]
-transform = Transform3D(240, 0, 0, 0, 64, 0, 0, 0, 1, 0, 21, -74)
+[node name="CloudsMid" type="MeshInstance3D" parent="."]
+transform = Transform3D(250, 0, 0, 0, 72, 0, 0, 0, 1, -15, 22, -92)
 mesh = SubResource("quad")
-material_override = SubResource("mat_clouds")
+material_override = SubResource("mat_cm")
 
 [node name="MountainsNear" type="MeshInstance3D" parent="."]
-transform = Transform3D(175, 0, 0, 0, 72, 0, 0, 0, 1, 0, -3, -60)
+transform = Transform3D(165, 0, 0, 0, 84, 0, 0, 0, 1, 0, -8, -72)
 mesh = SubResource("quad")
 material_override = SubResource("mat_near")
+
+[node name="CloudsLow" type="MeshInstance3D" parent="."]
+transform = Transform3D(210, 0, 0, 0, 56, 0, 0, 0, 1, 20, 9, -58)
+mesh = SubResource("quad")
+material_override = SubResource("mat_cl")
+
+[node name="MountainsFore" type="MeshInstance3D" parent="."]
+transform = Transform3D(135, 0, 0, 0, 68, 0, 0, 0, 1, 0, -14, -44)
+mesh = SubResource("quad")
+material_override = SubResource("mat_fore")
+
+[node name="DustFar" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -30)
+amount = 44
+lifetime = 11.0
+mesh = SubResource("dust_quad")
+emission_shape = 3
+emission_box_extents = Vector3(70, 45, 6)
+direction = Vector3(0.3, 1, 0)
+spread = 50.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.15
+initial_velocity_max = 0.55
+scale_amount_min = 0.07
+scale_amount_max = 0.18
+color = Color(1, 0.9, 0.74, 0.5)
+
+[node name="DustNear" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+amount = 22
+lifetime = 9.0
+mesh = SubResource("dust_quad")
+emission_shape = 3
+emission_box_extents = Vector3(34, 24, 2)
+direction = Vector3(0.4, 1, 0)
+spread = 60.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.2
+initial_velocity_max = 0.7
+scale_amount_min = 0.1
+scale_amount_max = 0.28
+color = Color(1, 0.93, 0.8, 0.32)
